@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import config from '../config'
+import config from '../config/index.js'
 
 
 const compareHash = (data, hash = '') => {
@@ -13,7 +13,7 @@ const compareHash = (data, hash = '') => {
 }
 
 const createHash = (data) => {
-    return bcrypt.genSalt(config.salt_rounds).then(salt => {
+    return bcrypt.genSalt(config.SALT_ROUNDS).then(salt => {
         return bcrypt.hash(data, salt)
     }).then((hash) => hash)
 }
