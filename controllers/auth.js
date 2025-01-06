@@ -1,41 +1,32 @@
-import express from "express"
-import bcrypt from 'bcrypt'
-import dotenv from "dotenv"
-import formidable from 'express-formidable'
-dotenv.config()
-import User from '../models/user.model.js'
-import jsonwebtoken from "jsonwebtoken"
-const router = express.Router()
+import UserService from "../services/users.js"
 
-const comparePassword = (password, hash = '') => {
-    if (password?.length > 0 && hash?.length > 0) {
-        return bcrypt.compare(password, hash).then(password =>
-            password)
+export default class UserController {
+
+    constructor() {
+        this.UserSerivceInstance = new UserService();
     }
-    else {
-        return null
+
+    login = async (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+
+            if (!email || !password) {
+                return res.status(400).json({
+                    message: "Email and Password are required",
+                    status: 400,
+                });
+            }
+            const resp = await this.AuthServiceInstance.login(email?.toLowerCase(), password);
+
+            return res.json({
+                data: resp,
+                message: "Login Successful",
+                status: 200,
+            });
+        }
+        catch (err) {
+            next(err)
+        }
     }
+
 }
-
-router.post('/login', formidable(), async (req, res) => {
-    const { userId, password } = req.fields
-    let userExists;
-    userExists = await User.findOne({ userId })
-
-    const passwordMatch = await comparePassword(password, userExists?.password)
-
-    if (userExists && passwordMatch) {
-        let token = jsonwebtoken.sign({ userId, role: userExists.role }, process.env.JWT_SECRET)
-        res.json({
-            data: { token, userId: userExists.userId }, message: "Login Successful",
-            status: 200
-        })
-    }
-    else {
-        res.json({ message: "Invalid Username or Password", status: 401, data: {} })
-    }
-}
-
-)
-
-export default router

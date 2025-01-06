@@ -5,24 +5,19 @@ export default class UserDataAccessLayer {
 
     }
 
-    //   async connect() {
-    //     await this.client.connect();
-    //     this.db = this.client.db(process.env.MONGODB_DB_NAME);
-    //   }
-
-    //   async disconnect() {
-    //     await this.client.close();
-    //   }
-
-    async getUsers() {
-        const collection = this.db.collection('users');
-        const result = await collection.find({}).toArray();
+    async getUsers(filters, params) {
+        const result = User.find(filters).skip(params.limit * (params.page - 1)).limit(params.limit);
         return result;
     }
 
-    async findUser(email) {
-        const user = await User.findOne({ email })
+    async findUser(filters) {
+        const user = await User.findOne(filters)
         return user
+    }
+
+    async findById(id) {
+        const user = await User.findById(id);
+        return user;
     }
 
     async addUser(userBody) {
@@ -31,15 +26,13 @@ export default class UserDataAccessLayer {
         return newUser;
     }
 
-    async updateUser(userId, updates) {
-        const collection = this.db.collection('users');
-        const result = await collection.updateOne({ _id: userId }, { $set: updates });
-        return result.modifiedCount;
+    async updateUser(id, updates) {
+        const user = await User.findByIdAndUpdate(id, updates, { new: true })
+        return user
     }
 
-    async deleteUser(userId) {
-        const collection = this.db.collection('users');
-        const result = await collection.deleteOne({ _id: userId });
-        return result.deletedCount;
+    async deleteUser(id) {
+        const deletedUser = await User.findByIdAndDelete(id)
+        return deletedUser
     }
 }

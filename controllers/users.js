@@ -8,26 +8,62 @@ export default class UserController {
 
     signup = async (req, res, next) => {
         try {
-            const { email, name, password } = req?.fields
+            const body = req?.body
 
-            const userBody = { name, password, email }
+            if (!body.email) {
+                throw Error("Email is Required Field");
+            }
 
-            // if (email && password) {
+            if (!body.password) {
+                throw Error("Password is Required Field");
+            }
+
+
             const user = await this.UserSerivceInstance.signup(userBody);
             return res.json({
                 data: user,
                 message: `User ${user.email} added`,
                 status: 200
             })
-            // }
-            // else {
-            res.json({
-                data: {}, message: `Email and Password Required for Signup`,
-                status: 400
-            })
-            // }
+
         } catch (err) {
             next(err);
         }
     }
+
+    getUsers = async (req, res, next) => {
+        try {
+            const params = { ...req.query }
+            const data = await this.UserSerivceInstance.getUsers(params);
+
+            return res.status(200).json({
+                data: data,
+                message: "Users Loaded Successfully",
+                status: 200,
+            });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    deleteUser = async (req, res, next) => {
+        try {
+            const id = req.params?.id;
+
+            if (!id) {
+                return res.status(400).json({
+                    message: "User id Required!",
+                    status: 400,
+                });
+            }
+            const resp = await this.UserSerivceInstance.deleteUser(id);
+            return res.json({
+                data: resp,
+                message: "User Deleted",
+                status: 200,
+            });
+        } catch (err) {
+            next(err);
+        }
+    };
 }

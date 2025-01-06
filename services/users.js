@@ -19,4 +19,26 @@ export default class UserService {
     }
   }
 
+  async getUsers(params) {
+    const resp = await this.UserDataAccess.getUsers({}, params);
+    return resp;
+  }
+
+  async deleteUser(id) {
+    const user = await this.UserDataAccess.deleteUser(id);
+
+    if (!user) {
+      throw Error("User not found!");
+    }
+
+    // if (!user.logo_url.includes("default.png")) {
+    //   fs.deleteFile('./public' +
+    //     user.logo_url
+    //   )
+    // }
+
+    return user;
+  }
+
 }
+
