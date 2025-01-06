@@ -9,7 +9,7 @@ export default class UserService {
   };
 
   async signup(userBody) {
-    const userExists = await this.UserDataAccess.findUser(userBody.email)
+    const userExists = await this.UserDataAccess.findUser({ email: userBody.email })
     if (userExists) {
       throw Error("Email Already Registered")
     } else {

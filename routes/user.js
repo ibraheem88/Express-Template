@@ -6,8 +6,8 @@ const UserControllerInstance = new UserController()
 const router = express.Router()
 
 
-router.post('/', authorizeAdmin, UserControllerInstance.signup)
+router.post('/', UserControllerInstance.signup)
 router.get('/', authorizeAdmin, UserControllerInstance.getUsers)
-router.delete('/:id', authorizeAdmin, UserControllerInstance.deleteUser)
+router.delete('/:id', UserControllerInstance.deleteUser)
 
 export default router

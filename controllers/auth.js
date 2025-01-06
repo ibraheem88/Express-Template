@@ -1,9 +1,9 @@
-import UserService from "../services/users.js"
+import AuthService from "../services/auth.js"
 
 export default class UserController {
 
     constructor() {
-        this.UserSerivceInstance = new UserService();
+        this.AuthServiceInstance = new AuthService();
     }
 
     login = async (req, res, next) => {

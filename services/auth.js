@@ -1,4 +1,4 @@
-import UserDataAccessLayer from "../repositories/user.js";
+import UserDataAccessLayer from "../repositories/users.js";
 import encrypt from "../utilis/encrypt.js";
 import jwt from "../utilis/jwt.js";
 

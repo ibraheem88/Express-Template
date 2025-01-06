@@ -9,6 +9,7 @@ export default class UserController {
     signup = async (req, res, next) => {
         try {
             const body = req?.body
+            console.log(body)
 
             if (!body.email) {
                 throw Error("Email is Required Field");
@@ -19,7 +20,7 @@ export default class UserController {
             }
 
 
-            const user = await this.UserSerivceInstance.signup(userBody);
+            const user = await this.UserSerivceInstance.signup(body);
             return res.json({
                 data: user,
                 message: `User ${user.email} added`,
@@ -33,7 +34,7 @@ export default class UserController {
 
     getUsers = async (req, res, next) => {
         try {
-            const params = { ...req.query }
+            const params = req.query
             const data = await this.UserSerivceInstance.getUsers(params);
 
             return res.status(200).json({

@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
+import config from '../config'
 
-const SALT_ROUNDS = 10
 
 const compareHash = (data, hash = '') => {
-    if (text?.length > 0 && hash?.length > 0) {
+    if (data?.length > 0 && hash?.length > 0) {
         return bcrypt.compare(data, hash).then(data =>
             data)
     }
@@ -13,7 +13,7 @@ const compareHash = (data, hash = '') => {
 }
 
 const createHash = (data) => {
-    return bcrypt.genSalt(SALT_ROUNDS).then(salt => {
+    return bcrypt.genSalt(config.salt_rounds).then(salt => {
         return bcrypt.hash(data, salt)
     }).then((hash) => hash)
 }
